@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QWidget, QLabel, QPushButt
 from PyQt5.QtGui import QFontDatabase
 from PyQt5.QtCore import Qt
 
-class Page1(QWidget):
+class Start(QWidget):
     def __init__(self, main_window):
         super().__init__()
         self.main_window = main_window
@@ -14,8 +14,8 @@ class Page1(QWidget):
         font_family2 = QFontDatabase.applicationFontFamilies(font_id2)[0]
 
         self.label = QLabel()
-        self.button_to_page2 = QPushButton("Go to Page 2")
-        self.button_to_page3 = QPushButton("Go to Page 3")
+        self.loginBtn = QPushButton("Login")
+        self.joinBtn = QPushButton("회원가입")
 
         # text1에 HTML로 글자 간격 조정
         self.label.setText(
@@ -47,7 +47,7 @@ class Page1(QWidget):
         )
 
         # 버튼 스타일 설정
-        self.button_to_page2.setStyleSheet(""" 
+        self.loginBtn.setStyleSheet(""" 
             QPushButton {
                 background-color: #3498db;  
                 color: white;              
@@ -63,7 +63,7 @@ class Page1(QWidget):
             }
         """)
 
-        self.button_to_page3.setStyleSheet("""
+        self.joinBtn.setStyleSheet("""
             QPushButton {
                 background-color: #2ecc71;  
                 color: white;              
@@ -79,12 +79,12 @@ class Page1(QWidget):
             }
         """)
 
-        self.button_to_page2.setFixedSize(200, 88)
-        self.button_to_page3.setFixedSize(200, 88)
+        self.loginBtn.setFixedSize(200, 88)
+        self.joinBtn.setFixedSize(200, 88)
 
         # 버튼 클릭 시 MainWindow의 메서드 호출
-        self.button_to_page2.clicked.connect(self.main_window.go_to_page2)
-        self.button_to_page3.clicked.connect(self.main_window.go_to_page3)
+        self.loginBtn.clicked.connect(self.main_window.go_to_login)
+        self.joinBtn.clicked.connect(self.main_window.go_to_join)
 
         # 세로 레이아웃 설정
         layout = QVBoxLayout()
@@ -95,8 +95,8 @@ class Page1(QWidget):
         # 버튼을 가로로 정렬하기 위한 HBoxLayout
         button_layout = QHBoxLayout()
         button_layout.setSpacing(20)  # 버튼 사이의 간격 설정
-        button_layout.addWidget(self.button_to_page2)
-        button_layout.addWidget(self.button_to_page3)
+        button_layout.addWidget(self.loginBtn)
+        button_layout.addWidget(self.joinBtn)
         button_layout.setAlignment(Qt.AlignCenter)  # 버튼들을 가로 중앙에 정렬
 
         layout.addLayout(button_layout)  # 버튼 레이아웃을 세로 레이아웃에 추가
