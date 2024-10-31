@@ -4,6 +4,7 @@ from start import Start
 from login import Login
 from join import Join
 from chepter_choice import Chepter
+from story_choice import Story
 from play import Play
 from status_bar import CustomStatusBar  # 커스텀 상태바 불러오기
 
@@ -22,11 +23,13 @@ class MainWindow(QMainWindow):
         self.login = Login(self)
         self.join = Join(self)
         self.chep = Chepter(self)
+        self.story = Story(self)
         self.play = Play(self)  # Play 인스턴스 생성
         self.stacked_widget.addWidget(self.start)
         self.stacked_widget.addWidget(self.login)
         self.stacked_widget.addWidget(self.join)
         self.stacked_widget.addWidget(self.chep)
+        self.stacked_widget.addWidget(self.story)
         self.stacked_widget.addWidget(self.play)
 
         # 커스텀 상태바 설정
@@ -48,10 +51,14 @@ class MainWindow(QMainWindow):
 
     def go_to_join(self):
         self.stacked_widget.setCurrentWidget(self.join)
-        self.status_bar.show()  # join로 전환 시 상태바 표시
+        self.status_bar.hide()  # join로 전환 시 상태바 표시
 
     def go_to_chep(self):
         self.stacked_widget.setCurrentWidget(self.chep)
+        self.status_bar.hide()
+
+    def go_to_story(self):
+        self.stacked_widget.setCurrentWidget(self.story)
         self.status_bar.hide()
 
     def go_to_play(self):
