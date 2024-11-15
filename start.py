@@ -24,24 +24,26 @@ class Start(QWidget):
                 .div1 {{
                     text-align: center;
                     margin: 0;  
-                    padding: 0;  
+                    padding: 0;
                 }}
                 .text1 {{
                     font-family: '{font_family1}';
                     font-size: 80px;
                     margin: 0;  
-                    padding: 0;  
+                    padding: 0; 
+                    color : #66677C;
                 }}
                 .text2 {{
                     font-family: '{font_family2}';
                     font-size: 85px;
                     margin: 0;  
-                    padding: 0;  
+                    padding: 0; 
+                    color : #222E48; 
                 }}
             </style>
             <div class="div1">
                 <p class="text1">꼬리에 꼬리를 무는</p>
-                <p class="text2">그 날 이야기</p>
+                <p class="text2">'그 날' 이야기</p>
             </div>
             '''
         )
@@ -49,33 +51,39 @@ class Start(QWidget):
         # 버튼 스타일 설정
         self.loginBtn.setStyleSheet(""" 
             QPushButton {
-                background-color: #3498db;  
-                color: white;              
+                background-color: white;  
+                color: #222E48;              
                 border-radius: 10px;       
                 padding: 10px;             
-                font-size: 16px;           
+                font-size: 20px;        
+                border: 3px solid #222E48;
             }
             QPushButton:hover {
-                background-color: #2980b9;  
+                background-color: #222E48;  
+                color: white;
             }
             QPushButton:pressed {
-                background-color: #1c598a;  
+                background-color: white;  
+                color: #222E48; 
             }
         """)
 
         self.joinBtn.setStyleSheet("""
             QPushButton {
-                background-color: #2ecc71;  
-                color: white;              
+                background-color: white;  
+                color: #222E48;               
                 border-radius: 10px;       
                 padding: 10px;             
-                font-size: 16px;           
+                font-size: 20px;      
+                border: 3px solid #222E48;     
             }
             QPushButton:hover {
-                background-color: #27ae60;  
+                background-color: #222E48; 
+                color: white; 
             }
             QPushButton:pressed {
-                background-color: #1e8449;  
+                background-color: white;  
+                color: #222E48;  
             }
         """)
 
