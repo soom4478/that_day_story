@@ -1,8 +1,30 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QLabel, QSizePolicy, QPushButton, QDialog, QVBoxLayout
+from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QLabel, QSizePolicy, QPushButton, QDialog
 from PyQt5.QtGui import QPixmap, QMouseEvent
-from PyQt5.QtCore import Qt, QPoint
+from PyQt5.QtCore import Qt
 from overlay_image import OverlayImage
+
+class ClearDialog(QDialog):
+    def __init__(self, main_window, parent=None):
+        super().__init__(parent)
+        self.main_window = main_window  # main_window 참조 저장
+        self.setWindowTitle("게임 클리어")
+        self.setFixedSize(300, 150)
+
+        layout = QVBoxLayout()
+
+        label = QLabel("모든 이미지를 변경했습니다! 게임 클리어!", self)
+        layout.addWidget(label)
+
+        ok_button = QPushButton("확인", self)
+        ok_button.clicked.connect(self.go_to_story)  # 메서드 연결
+        layout.addWidget(ok_button)
+
+        self.setLayout(layout)
+
+    def go_to_story(self):
+        self.close()  # 다이얼로그 닫기
+        self.main_window.go_to_story()  # story 페이지로 이동
 
 class GameOverDialog(QDialog):
     def __init__(self, main_window, parent=None):
@@ -48,7 +70,8 @@ class Play(QWidget):
     def __init__(self, main_window):
         super().__init__()
         self.main_window = main_window
-        self.하트 = 5  # 하트 변수 초기화
+        self.heart = 5  # 하트 변수 초기화
+        self.changed_overlays = set()  # 이미지가 변경된 오버레이 인덱스를 추적하는 집합
 
         # QLabel을 사용하여 이미지 로드
         self.image_label = QLabel(self)
@@ -85,16 +108,26 @@ class Play(QWidget):
         self.is_dragging = False  # 드래그 여부 확인 변수
         self.move_limit = 50
 
-    def reset_game(self):
-        """게임 상태를 초기화합니다."""
-        self.하트 = 5  # 하트 초기화
-        self.main_window.statusBar().reset_hearts()  # 상태바의 하트 초기화
-        print("게임이 초기화되었습니다.")
-
     def handle_overlay_click(self, event, index, label):
         if event.button() == Qt.LeftButton:
             label.change_image(index)
+            self.changed_overlays.add(index)  # 이미지가 변경되면 인덱스를 추가
             self.show_info_dialog(index)
+
+            # 모든 이미지가 변경되었는지 확인
+            if len(self.changed_overlays) == len(self.overlay_labels):
+                print("모든 오버레이가 변경되었습니다!")  # 디버깅용 출력
+                self.show_clear_dialog()
+
+    def show_clear_dialog(self):
+        clear_dialog = ClearDialog(self.main_window, self)
+        clear_dialog.exec_()
+
+    def reset_game(self):
+        """게임 상태를 초기화합니다."""
+        self.heart = 5  # 하트 초기화
+        self.main_window.statusBar().reset_hearts()  # 상태바의 하트 초기화
+        print("게임이 초기화되었습니다.")
 
     def show_info_dialog(self, index):
         dialog_texts = [
@@ -131,12 +164,12 @@ class Play(QWidget):
                 if not self.is_dragging:  # 드래그가 아닌 경우에만 하트 감소
                     click_pos = event.pos()
                     if not any(overlay.geometry().contains(self.mapToGlobal(click_pos)) for overlay in self.overlay_labels):
-                        self.하트 -= 1
-                        print(f"하트 감소: {self.하트}")
-                        self.main_window.statusBar().update_hearts(self.하트)
+                        self.heart -= 1
+                        print(f"하트 감소: {self.heart}")
+                        self.main_window.statusBar().update_hearts(self.heart)
 
                         # 하트가 0이 되면 GameOverDialog를 표시
-                        if self.하트 <= 0:
+                        if self.heart <= 0:
                             game_over_dialog = GameOverDialog(self.main_window, self)
                             game_over_dialog.exec_()
                             self.reset_game()  # 게임 상태 초기화

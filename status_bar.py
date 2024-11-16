@@ -7,7 +7,7 @@ class CustomStatusBar(QStatusBar):
 
         # 상태바 스타일 설정 (배경색 및 텍스트 색상)
         self.setStyleSheet("background-color: white; color: white;")
-        self.setFixedHeight(100)  # 원하는 높이 값으로 변경
+        self.setFixedHeight(70)  # 원하는 높이 값으로 변경
 
         # 상태바에 하트 이미지 추가
         self.heart_images = []
