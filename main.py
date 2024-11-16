@@ -68,14 +68,6 @@ class MainWindow(QMainWindow):
 if __name__ == "__main__":
     app = QApplication(sys.argv)
 
-    # 스타일 파일 로드
-    try:
-        with open("styles.qss", "r") as f:
-            style = f.read()
-            app.setStyleSheet(style)  # QSS 파일을 애플리케이션에 적용
-    except FileNotFoundError:
-        print("styles.qss 파일을 찾을 수 없습니다. 기본 스타일로 실행합니다.")
-
     window = MainWindow()
     window.show()
     sys.exit(app.exec_())

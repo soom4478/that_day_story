@@ -26,9 +26,9 @@ class Login(QWidget):
 
         layout = QVBoxLayout()
         layout.addWidget(self.label)
+        layout.addWidget(self.backBtn)
         layout.addWidget(self.usernameInput)  # 사용자 이름 입력 필드 추가
         layout.addWidget(self.passwordInput)  # 비밀번호 입력 필드 추가
-        layout.addWidget(self.backBtn)
         layout.addWidget(self.chepBtn)
         layout.addWidget(self.joinBtn)
         self.setLayout(layout)

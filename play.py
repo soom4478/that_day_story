@@ -13,18 +13,18 @@ class ClearDialog(QDialog):
 
         layout = QVBoxLayout()
 
-        label = QLabel("모든 이미지를 변경했습니다! 게임 클리어!", self)
+        label = QLabel("모든 원인과 전조증상을 발견하였습니다! \n 삼풍백화점이 붕괴되었습니다.", self)
         layout.addWidget(label)
 
         ok_button = QPushButton("확인", self)
-        ok_button.clicked.connect(self.go_to_story)  # 메서드 연결
+        ok_button.clicked.connect(self.go_to_story)
         layout.addWidget(ok_button)
 
         self.setLayout(layout)
 
     def go_to_story(self):
-        self.close()  # 다이얼로그 닫기
-        self.main_window.go_to_story()  # story 페이지로 이동
+        self.close()
+        self.main_window.go_to_story()
 
 class GameOverDialog(QDialog):
     def __init__(self, main_window, parent=None):
@@ -35,7 +35,7 @@ class GameOverDialog(QDialog):
 
         layout = QVBoxLayout()
 
-        label = QLabel("하트가 모두 소진되었습니다. 게임이 종료됩니다.", self)
+        label = QLabel("하트가 모두 소진되었습니다. \n 이전 화면으로 돌아갑니다.", self)
         layout.addWidget(label)
 
         ok_button = QPushButton("확인", self)
@@ -45,13 +45,13 @@ class GameOverDialog(QDialog):
         self.setLayout(layout)
 
     def go_to_story(self):
-        self.close()  # 다이얼로그 닫기
-        self.main_window.go_to_story()  # story 페이지로 이동
+        self.close()
+        self.main_window.go_to_story()
 
 class InfoDialog(QDialog):
     def __init__(self, message, parent=None):
         super().__init__(parent)
-        self.setWindowTitle("정보")
+        self.setWindowTitle("원인과 전조증상")
         self.setFixedSize(300, 150)
 
         layout = QVBoxLayout()
@@ -73,9 +73,8 @@ class Play(QWidget):
         self.heart = 5  # 하트 변수 초기화
         self.changed_overlays = set()  # 이미지가 변경된 오버레이 인덱스를 추적하는 집합
 
-        # QLabel을 사용하여 이미지 로드
         self.image_label = QLabel(self)
-        self.pixmap = QPixmap("images/testImg.png")
+        self.pixmap = QPixmap("images/gmaeImg.png") # 배경
 
         self.image_label.setPixmap(self.pixmap)
         self.image_label.setScaledContents(False)
@@ -88,13 +87,13 @@ class Play(QWidget):
         layout.addWidget(self.image_label)
         self.setLayout(layout)
 
-        overlay_positions = [(100, 100), (300, 150), (500, 200), (200, 300), (400, 400)]
+        overlay_positions = [(410, 80), (651, 580), (722, 1240), (357, 1450), (942, 1420)]
         self.overlay_labels = []
 
         for i, pos in enumerate(overlay_positions):
             overlay_images = [f"images/find_imgs/img{i + 1}.png", f"images/find_imgs/img{i + 1}_2.png"]
             overlay_label = OverlayImage(overlay_images, self)
-            overlay_label.setFixedSize(200, 100)
+            overlay_label.setFixedSize(235, 218)
             overlay_label.move(*pos)
             overlay_label.show()
             overlay_label.mousePressEvent = lambda event, idx=i, label=overlay_label: self.handle_overlay_click(event, idx, label)
@@ -111,31 +110,28 @@ class Play(QWidget):
     def handle_overlay_click(self, event, index, label):
         if event.button() == Qt.LeftButton:
             label.change_image(index)
-            self.changed_overlays.add(index)  # 이미지가 변경되면 인덱스를 추가
+            self.changed_overlays.add(index)
             self.show_info_dialog(index)
 
-            # 모든 이미지가 변경되었는지 확인
+            # 모든 이미지가 변경되었는지
             if len(self.changed_overlays) == len(self.overlay_labels):
-                print("모든 오버레이가 변경되었습니다!")  # 디버깅용 출력
                 self.show_clear_dialog()
 
     def show_clear_dialog(self):
         clear_dialog = ClearDialog(self.main_window, self)
         clear_dialog.exec_()
 
-    def reset_game(self):
-        """게임 상태를 초기화합니다."""
+    def reset_game(self): # 게임 초기화함
         self.heart = 5  # 하트 초기화
         self.main_window.statusBar().reset_hearts()  # 상태바의 하트 초기화
-        print("게임이 초기화되었습니다.")
 
     def show_info_dialog(self, index):
         dialog_texts = [
-            "첫 번째 오버레이 클릭됨",
-            "두 번째 오버레이 클릭됨",
-            "세 번째 오버레이 클릭됨",
-            "네 번째 오버레이 클릭됨",
-            "다섯 번째 오버레이 클릭됨"
+            "바퀴로 옮긴 환풍구",
+            "부실공사",
+            "식당가에 나타난 싱크홀",
+            "붕괴 전 울린 소음",
+            "아무 대응 않는 관계자들"
         ]
         dialog = InfoDialog(dialog_texts[index], self)
         dialog.exec_()

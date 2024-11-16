@@ -7,7 +7,7 @@ class Join(QWidget):
         super().__init__()
         self.main_window = main_window
 
-        self.label = QLabel("회원가입 창")
+        self.label = QLabel("회원가입")
         self.backBtn = QPushButton("<-")
         self.loginBtn = QPushButton("로그인")
         self.registerBtn = QPushButton("회원가입")  # 새로운 버튼 생성
